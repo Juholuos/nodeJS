@@ -1,0 +1,2 @@
+2024 01 20	12:44:18	c54e30b1-2576-4c5c-80ed-c225054571f1	TypeError: contentType.includess is not a function
+2024 01 20	12:47:32	d317159c-19bc-4f98-8f6b-93f3cc08b4c0	TypeError: fsPromises.readFil is not a function

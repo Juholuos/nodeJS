@@ -1,0 +1,4 @@
+2024 01 20	12:44:18	c54e30b1-2576-4c5c-80ed-c225054571f1	TypeError: contentType.includess is not a function
+2024 01 20	12:47:32	d317159c-19bc-4f98-8f6b-93f3cc08b4c0	TypeError: fsPromises.readFil is not a function
+2024 01 20	13:01:58	92b5805c-b936-449d-9dd9-343bb1510e98	Error: ENOENT: no such file or directory, open 'C:\Users\D00m5\OneDrive\Tiedostot\Pythonuusi\nodeJS\dave-gray-course\06TUT\views\404.html'
+2024 01 20	13:01:59	b6a3741e-d247-4c10-be9b-a88bc454dd28	Error: ENOENT: no such file or directory, open 'C:\Users\D00m5\OneDrive\Tiedostot\Pythonuusi\nodeJS\dave-gray-course\06TUT\views\404.html'
