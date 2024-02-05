@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
 });
 
 // Create member
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const newMember = {
     id: uuid.v4(),
     name: req.body.name,
@@ -32,10 +32,13 @@ router.post("/", (req, res) => {
     return res.status(400).json({ msg: "Please include a name and email" });
   }
 
+  const newMemberId = newMember.id;
+
   members.push(newMember);
 
-  // res.json(members);
-  res.redirect('/')
+  console.log(`New member added with ID: ${newMemberId}`);
+  res.json(members);
+  // res.redirect('/')
 });
 
 // Update member
