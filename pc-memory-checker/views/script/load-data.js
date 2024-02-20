@@ -12,8 +12,11 @@ window.onload = async function() {
           cInfo.querySelector('.total').innerHTML = disk.totalGB;
           cInfo.querySelector('.available').innerHTML = disk.availableGB;
 
-          cContainer.querySelector('.bar').style.width = `${disk.usedPercentage}%`;
-          cContainer.querySelector('.bar').innerText = `(${disk.usedPercentage}%)`
+          const barEl = cContainer.querySelector('.bar');
+          barEl.style.width = `${disk.usedPercentage}%`;
+          barEl.innerText = `(${disk.usedPercentage}%)`
+
+          manageBars(barEl);
         } else if (disk.mount == 'E:') {
           const eContainer = document.querySelector('.E-container');
           const eInfo = document.querySelector('.E-info')
@@ -21,8 +24,11 @@ window.onload = async function() {
           eInfo.querySelector('.total').innerHTML = disk.totalGB;
           eInfo.querySelector('.available').innerHTML = disk.availableGB;
 
-          eContainer.querySelector('.bar').style.width = `${disk.usedPercentage}%`;
-          eContainer.querySelector('.bar').innerText = `(${disk.usedPercentage}%)`
+          const barEl = eContainer.querySelector('.bar');
+          barEl.style.width = `${disk.usedPercentage}%`;
+          barEl.innerText = `(${disk.usedPercentage}%)`
+
+          manageBars(barEl);
         }
       })
     })

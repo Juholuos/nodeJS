@@ -1,16 +1,16 @@
 [
   {
     "mount": "C:",
-    "usedGB": "174.9",
+    "usedGB": "177.0",
     "totalGB": "223.0",
-    "usedPercentage": "78.4",
-    "availableGB": "48.1"
+    "usedPercentage": "79.4",
+    "availableGB": "46.0"
   },
   {
     "mount": "E:",
     "usedGB": "218.7",
     "totalGB": "465.7",
     "usedPercentage": "47.0",
-    "availableGB": "247.1"
+    "availableGB": "247.0"
   }
 ]

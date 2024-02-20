@@ -15,7 +15,7 @@ html body {
 .container {
   width: 500px;
   height: 500px;
-  background-color: rgba(0, 0, 0, 0.9);
+  border: 3px solid black;
   border-radius: 50px;
   color: white;
   display: flex;
@@ -23,7 +23,9 @@ html body {
   overflow: hidden;
   text-align: center;
   align-items: space-between;
+  background-color: rgb(26, 56, 90);
 }
+
 
 .C-container, .E-container {
   display: flex;
@@ -32,12 +34,12 @@ html body {
   align-items: center;
 }
 
-.C-info, .E-info {
-  font-size: 25px;
+.C-container {
+  border-bottom: 2px solid black;
 }
 
-.E-container {
-  background-color: rgb(34, 63, 54);
+.C-info, .E-info {
+  font-size: 25px;
 }
 
 .bar-container {
@@ -52,7 +54,7 @@ html body {
 .bar {
   width: 80%;
   height: 100%;
-  background-color: rgb(220, 121, 22);
+  background-color: rgb(22, 156, 38);
   display: flex;
   justify-content: center;
   align-items: center;
