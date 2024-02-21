@@ -3,6 +3,8 @@ window.onload = async function() {
   await fetch('http://localhost:5000/pc-memory-info.json')
     .then(response => response.json())
     .then(data => {
+      // const loading = document.querySelector('.loading');
+      // loading.style.display = 'none';
       data.forEach(disk => {
         console.log(disk.mount);
         if (disk.mount == 'C:') {

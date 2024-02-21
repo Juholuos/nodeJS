@@ -52,9 +52,7 @@ html body {
 }
 
 .bar {
-  width: 80%;
   height: 100%;
-  background-color: rgb(22, 156, 38);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,4 +60,8 @@ html body {
 
 .bar p {
   transform: translateY(-15%);
+}
+
+.loading {
+  display: block;
 }
