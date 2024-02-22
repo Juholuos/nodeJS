@@ -1,6 +1,6 @@
-function manageBars(barEl) {
+function manageBars(barEl, barContainerWidth) {
   const barElStyle = barEl.style;
-  const widthPercentage = parseFloat(barElStyle.width);
+  const widthPercentage = parseFloat((parseFloat(barElStyle.width) / parseFloat(barContainerWidth)) * 100);
 
   const remainingPercentage = 100 - widthPercentage;
 

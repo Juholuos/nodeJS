@@ -3,10 +3,8 @@ window.onload = async function() {
   await fetch('http://localhost:5000/pc-memory-info.json')
     .then(response => response.json())
     .then(data => {
-      // const loading = document.querySelector('.loading');
-      // loading.style.display = 'none';
       data.forEach(disk => {
-        console.log(disk.mount);
+        
         if (disk.mount == 'C:') {
           const cContainer = document.querySelector('.C-container');
           const cInfo = document.querySelector('.C-info')
@@ -18,7 +16,6 @@ window.onload = async function() {
           barEl.style.width = `${disk.usedPercentage}%`;
           barEl.innerText = `(${disk.usedPercentage}%)`
 
-          manageBars(barEl);
         } else if (disk.mount == 'E:') {
           const eContainer = document.querySelector('.E-container');
           const eInfo = document.querySelector('.E-info')
@@ -29,9 +26,8 @@ window.onload = async function() {
           const barEl = eContainer.querySelector('.bar');
           barEl.style.width = `${disk.usedPercentage}%`;
           barEl.innerText = `(${disk.usedPercentage}%)`
-
-          manageBars(barEl);
         }
       })
+      animateBars();
     })
 }
