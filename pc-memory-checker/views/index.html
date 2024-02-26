@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PC Memory Checker</title>
   <link rel="stylesheet" href="styles/style.css">
-</head>
+  <link rel="stylesheet" href="styles/file-container.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></head>
 <body>
   <div class="container">
     <div class="C-container">
@@ -29,8 +30,15 @@
       </div>
     </div>
   </div>
+  <div class="open-file-container">
+    <input type="file" class="file-input" style="display: none;">
+    <button class="file-btn"><i class="fa-regular fa-file"></i>
+      &nbsp; Open File Manager
+    </button>
+  </div>
   <script src="./script/manage-bars.js"></script>
   <script src="./script/animations.js"></script>
+  <script src="./script/files.js"></script>
   <script src="./script/load-data.js"></script>
 </body>
 </html>
