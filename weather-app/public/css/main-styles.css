@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.container {
+  width: 994px;
+  height: 626px;
+  background:linear-gradient(to bottom, blue, rgb(193, 193, 193));
+  display: flex;
+  color: white;
+  justify-content: center;
+  position: relative;
+  border-radius: 50px;
+}
+
+.top-info {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 40px 20px 40px;
+}
+
+.current-weather-container {
+  position: absolute;
+  width: 134px;
+  height: 134px;
+  border-radius: 50%;
+  top: 20px;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgb(187, 187, 187), rgb(0, 0, 71));
+  border: 1px solid gray;
+}
+
+.current-weather {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-degree {
+  font-size: 40px;
+  transform: translateY(-7%);
+}
+
+.current-state {
+  position: absolute;
+  bottom: 15px;
+}
+
+.city-header {
+  white-space:nowrap;
+  height: 100%;
+}
+
+.time-header {
+  white-space:nowrap;
+  height: 100%;
+}
+
+.hour-day-container {
+  position: absolute;
+  top: 17%;
+  width: 90%;
+  height: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hour-container {
+  width: 100%;
+  height: 45%;
+  display: flex;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgb(42, 17, 109);
+}
+
+.hour-degree-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16.66%;
+  height: 100%;
+  background-color: rgba(0, 0, 120, 0.5);
+  border-right: 1px solid rgb(42, 17, 109);
+  text-align: center;
+}
+
+.hour, .degree {
+  display: flex;
+  width: 100%;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(42, 17, 109);
+  font-size: 30px;
+}
+
+.degree {
+  border-bottom: none;
+}
+
+.day-container {
+  width: 100%;
+  height: 45%;
+  border-radius: 30px;
+  display: flex;
+  overflow: hidden;
+}
+
+.day-degree-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16.66%;
+  height: 100%;
+  background-color: rgba(0, 0, 120, 0.5);
+  border-right: 1px solid rgb(42, 17, 109);
+  text-align: center;
+}
+
+.day, .day-degree {
+  display: flex;
+  width: 100%;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(42, 17, 109);
+  font-size: 30px;
+}
+
+.day-degree {
+  border-bottom: none;
+}
