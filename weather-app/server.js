@@ -16,6 +16,10 @@ app.get('/', (req, res) => {
   res.send('hello world!')
 })
 
+app.get('/api/weather-api.js', (req, res) => {
+  res.sendStatus(200);
+})
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

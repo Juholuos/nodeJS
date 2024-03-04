@@ -1,30 +1,62 @@
-const request = require('request');
-const argv = require('yargs').argv;
-
 const dayjs = require('dayjs');
+const fs = require('fs');
+const path = require('path')
 dayjs().format()
 
-let apiKey = '90c8e783d8cfa201bfc850f6d773f546'
-let city = argv.c || 'savonlinna';
-let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+let apiKey = '1fcf47879262ce7681e31f9bec355bb0'
+let lat = 61.8699
+let lon = 28.87999
+let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=hourly,minutely&appid=${apiKey}`
 
-// request(url, function(err, response, body) {
-//   if(err) {
-//     console.log('error:', error);
-//   } else {
-//     let weather = JSON.parse(body)
-
-//     let message = `${weather.main.temp} celsiusastetta paikkakunnalla ${weather.name}!`;
-//     console.log(message);
-//   }
-// });
-
-
+let weatherData = []; 
 
 fetch(url)
   .then(response => response.json())
   .then(data => {
-    const location = data.name;
+
+    let dts = [];
+    // dt for next 7 days
+    data.daily.forEach((value, index) => {
+      if (index > 0) {
+
+        dts.push(value.dt)
+
+        // Day name
+        const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
+          weekday: "long",
+        });
+
+        const tempCelsius = value.temp.day;
+
+        let weatherObj = {
+          index: index,
+          dt: value.dt,
+          dayname: dayname,
+          tempCelsius: tempCelsius
+        };
+
+        weatherData.push(weatherObj);
+      }
+    })
+    writeFile(weatherData)
+});
+
+const filePath = path.join(__dirname, '..', 'data', 'weatherData.json');
+
+function writeFile(data) {
+  fs.writeFile(filePath, JSON.stringify(weatherData), (err) => {
+    if (err) {
+      console.error('Error writing to JSON file:', err);
+      return;
+    }
+    console.log('weatherData has been written to weatherData.json');
+  });
+}
+
+
+
     
-    
-  })
+
+
+
+
