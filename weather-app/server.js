@@ -11,6 +11,9 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Define a route to serve the JSON file
+app.use('/data', express.static(path.join(__dirname, 'data')));
+
 app.get('/', (req, res) => {
   console.log('halo');
   res.send('hello world!')
