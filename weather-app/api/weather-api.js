@@ -1,8 +1,10 @@
 const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path')
-dayjs().format()
 
+async function updateWeatherData() {
+
+}
 let dayApiKey = '1fcf47879262ce7681e31f9bec355bb0'
 let lat = 61.8699
 let lon = 28.87999
@@ -10,6 +12,7 @@ let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}
 
 
 let dailyData = []; 
+let hourlyData = [];
 
 // Fetch day data
 fetch(url)
@@ -34,23 +37,8 @@ fetch(url)
         dailyData.push(dailyObj);
       }
     })
-    writeDailyFile(dailyData)
+    writeToFile('dailyData.json', dailyData)
 });
-
-const dailyFilePath = path.join(__dirname, '..', 'data', 'dailyData.json');
-
-// Write to file
-function writeDailyFile(dailyData) {
-  fs.writeFile(dailyFilePath, JSON.stringify(dailyData), (err) => {
-    if (err) {
-      console.error('Error writing to JSON file:', err);
-      return;
-    }
-    console.log('dailyData has been written to dailyData.json');
-  });
-}
-
-let hourlyData = [];
 
 fetch(url)
   .then(response => response.json())
@@ -67,21 +55,29 @@ fetch(url)
         hourlyData.push(hourlyObj);
       }
     })
-    writeHourlyData(hourlyData)
+    writeToFile('hourlyData.json', hourlyData)
   })
 
-const hourlyFilePath = path.join(__dirname, '..', 'data', 'hourlyData.json');
 
-//write to file
-function writeHourlyData(hourlyData) {
-  fs.writeFile(hourlyFilePath, JSON.stringify(hourlyData), (err) => {
+
+function writeToFile(filename, data) {
+  const currentTime = dayjs().format('HH:mm');
+  const filePath = path.join(__dirname, '..', 'data', filename);
+  fs.writeFile(filePath, JSON.stringify(data), (err) => {
     if (err) {
-      console.error('Error:', err)
-      return
+      console.error('Error writing to JSON file:', err);
+    } else {
+      console.log(`${filename} has been written succesfully at ${currentTime}`);
     }
-    console.log('hourlyData has been written to dailyData.json');
   })
 }
+
+module.exports = {
+  writeToFile: writeToFile,
+  dailyData: dailyData,
+  hourlyData: hourlyData
+};
+
 
 
 

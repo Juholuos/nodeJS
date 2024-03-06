@@ -17,6 +17,7 @@ app.use('/data', express.static(path.join(__dirname, 'data')));
 app.get('/', (req, res) => {
   console.log('halo');
   res.send('hello world!')
+  
 })
 
 app.get('/api/weather-api.js', (req, res) => {
