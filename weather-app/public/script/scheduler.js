@@ -5,7 +5,6 @@ let result;
 
 function updateResult() {
   let currentTime = dayjs().format('HH:mm')
-  // console.log(currentTime);
   result = parseInt(currentTime.slice(3, 10))
   console.log(currentTime, result);
   checkTime();

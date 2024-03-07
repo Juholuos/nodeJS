@@ -2,13 +2,40 @@ const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path')
 
-let dayApiKey = '1fcf47879262ce7681e31f9bec355bb0'
+const apiKey = '1fcf47879262ce7681e31f9bec355bb0'
 let lat = 61.8699
 let lon = 28.87999
-let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${dayApiKey}`
+let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`
+const cityUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&appid=${apiKey}`
+
+
+function getCityName() {
+  fetch(cityUrl)
+    .then(response => response.json())
+    .then(data => {
+      const cityName = data[0].name;
+      updateLocation(cityName)
+    })
+    .catch(error => {
+      console.error('Error fetching city data:', error)
+    })
+}
 
 
 
+function updateLocation(cityName) {
+  const date = dayjs().format('HH:mm, DD.MM.YYYY')
+  let locationData = [];
+
+  const locationObj = {
+    location: cityName,
+    date: date
+  }
+  locationData.push(locationObj);
+  writeToFile('location.json', locationData);
+}
+
+getCityName();
 
 
 // Fetch day data
@@ -47,9 +74,11 @@ function updateWeatherData() {
           index: index,
           time: time,
           dt: value.dt,
-          tempCelsius: `${value.temp.toFixed(0)}°C`
+          tempCelsius: `${value.temp.toFixed(0)}°C`,
+          state: value.weather[0].main
         }
         hourlyData.push(hourlyObj);
+        console.log(hourlyObj);
       }
     })
 
@@ -72,10 +101,6 @@ function writeToFile(filename, data) {
     }
   })
 }
-
-// setInterval(() => {
-//   updateWeatherData()
-// }, 60000)
 
 module.exports = updateWeatherData
 

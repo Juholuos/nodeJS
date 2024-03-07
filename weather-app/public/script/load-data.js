@@ -6,6 +6,10 @@ window.onload = async function() {
     .then(data => {
       data.forEach(date => {
         const hourContainer = document.querySelector('.hour-container');
+        const currentDegreeEl = document.querySelector('.current-degree');
+        const currentStateEl = document.querySelector('.current-state');
+        currentDegreeEl.innerHTML = date.tempCelsius;
+        currentStateEl.innerHTML = date.state;
         hourContainer.querySelectorAll('.degree').forEach((degree, index) => {
           if (index === date.index - 1) {
             degree.innerHTML = date.tempCelsius;
@@ -36,4 +40,13 @@ window.onload = async function() {
         });
       });
     });
+
+  await fetch('http://localhost:3000/data/location.json')
+    .then(response => response.json())
+    .then(data => {
+      const cityEl = document.querySelector('.city-header');
+      const dateEl = document.querySelector('.time-header');
+      cityEl.innerHTML = data[0].location;
+      dateEl.innerHTML = data[0].date;
+    }).catch(error => console.error('error fetching', error))
 };
