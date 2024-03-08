@@ -2,6 +2,7 @@ const updateWeatherData = require('../../api/weather-api');
 const dayjs = require('dayjs');
 
 let result;
+console.log('Scheduler running');
 
 function updateResult() {
   let currentTime = dayjs().format('HH:mm')

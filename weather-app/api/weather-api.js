@@ -54,13 +54,19 @@ function updateWeatherData() {
         const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
           weekday: "short",
         });
-        const tempCelsius = value.temp.day.toFixed(0);
+        const maxTemp = (value.temp.max).toFixed(0);
+        const minTemp = (value.temp.min).toFixed(0);
+        const dayState = value.weather[0].main;
+        const icon = value.weather[0].icon;
         let dailyObj = {
           index: index,
           date: date,
           dt: value.dt,
           dayname: dayname,
-          tempCelsius: `${tempCelsius}°C`
+          maxTemp: maxTemp,
+          minTemp: minTemp,
+          state: dayState,
+          icon: icon
         };
         dailyData.push(dailyObj);
       }
@@ -78,7 +84,6 @@ function updateWeatherData() {
           state: value.weather[0].main
         }
         hourlyData.push(hourlyObj);
-        console.log(hourlyObj);
       }
     })
 
@@ -88,7 +93,7 @@ function updateWeatherData() {
   .catch(error => console.error('Error fetching weather data:', error))
 }
 
-
+updateWeatherData();
 
 function writeToFile(filename, data) {
   const currentTime = dayjs().format('HH:mm');

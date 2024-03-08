@@ -30,8 +30,9 @@ window.onload = async function() {
         const dayContainer = document.querySelector('.day-container');
         dayContainer.querySelectorAll('.day-degree').forEach((degree, index) => {
           if (index === date.index - 1) {
-            degree.innerHTML = date.tempCelsius;
-          }
+            degree.querySelector('.day-top').innerHTML = date.maxTemp;
+            degree.querySelector('.day-low').innerHTML = date.minTemp;
+            degree.querySelector('.day-state').innerHTML = date.state;          }
         });
         dayContainer.querySelectorAll('.day').forEach((day, index) => {
           if (index === date.index - 1) {
