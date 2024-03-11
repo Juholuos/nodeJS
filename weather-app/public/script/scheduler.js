@@ -7,7 +7,6 @@ console.log('Scheduler running');
 function updateResult() {
   let currentTime = dayjs().format('HH:mm')
   result = parseInt(currentTime.slice(3, 10))
-  console.log(currentTime, result);
   checkTime();
 }
 

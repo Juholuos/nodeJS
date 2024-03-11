@@ -35,7 +35,7 @@ function updateLocation(cityName) {
   writeToFile('location.json', locationData);
 }
 
-getCityName();
+
 
 
 // Fetch day data
@@ -54,8 +54,8 @@ function updateWeatherData() {
         const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
           weekday: "short",
         });
-        const maxTemp = (value.temp.max).toFixed(0);
-        const minTemp = (value.temp.min).toFixed(0);
+        const maxTemp = `${(value.temp.max).toFixed(0)}°`;
+        const minTemp = `${(value.temp.min).toFixed(0)}°`;
         const dayState = value.weather[0].main;
         const icon = value.weather[0].icon;
         let dailyObj = {
@@ -74,14 +74,16 @@ function updateWeatherData() {
 
     // HourlyData
     data.hourly.forEach((value, index) => {
-      if(index > 0 && index < 7) {
+      if(index >= 0 && index < 7) {
         const time = dayjs().add(index, 'hour').format('HH:mm')
+        const icon = value.weather[0].icon;
         let hourlyObj = {
           index: index,
           time: time,
           dt: value.dt,
-          tempCelsius: `${value.temp.toFixed(0)}°C`,
-          state: value.weather[0].main
+          tempCelsius: `${value.temp.toFixed(0)}°`,
+          state: value.weather[0].main,
+          icon: `https://openweathermap.org/img/wn/${icon}@2x.png`
         }
         hourlyData.push(hourlyObj);
       }
@@ -89,6 +91,7 @@ function updateWeatherData() {
 
     writeToFile('hourlyData.json', hourlyData)
     writeToFile('dailyData.json', dailyData)
+    getCityName();
   })
   .catch(error => console.error('Error fetching weather data:', error))
 }

@@ -8,8 +8,12 @@ window.onload = async function() {
         const hourContainer = document.querySelector('.hour-container');
         const currentDegreeEl = document.querySelector('.current-degree');
         const currentStateEl = document.querySelector('.current-state');
-        currentDegreeEl.innerHTML = date.tempCelsius;
-        currentStateEl.innerHTML = date.state;
+        const currentIcon = document.querySelector('.current-icon')
+        const icon = data[0].icon
+        currentIcon.setAttribute('src', icon)
+        currentDegreeEl.innerHTML = data[0].tempCelsius;
+        currentStateEl.innerHTML = data[0].state;
+
         hourContainer.querySelectorAll('.degree').forEach((degree, index) => {
           if (index === date.index - 1) {
             degree.innerHTML = date.tempCelsius;
@@ -36,7 +40,8 @@ window.onload = async function() {
         });
         dayContainer.querySelectorAll('.day').forEach((day, index) => {
           if (index === date.index - 1) {
-            day.innerHTML = date.dayname;
+            day.querySelector('.weekday').innerHTML = date.dayname;
+            day.querySelector('.date').innerHTML = (date.date).slice(0, 5)
           }
         });
       });

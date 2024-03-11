@@ -39,7 +39,7 @@ body {
   border-radius: 50%;
   top: 20px;
   z-index: 100;
-  background: linear-gradient(to bottom, rgb(187, 187, 187), rgb(0, 0, 71));
+  background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(0, 0, 200));
   border: 1px solid gray;
 }
 
@@ -89,7 +89,7 @@ body {
   display: flex;
   border-radius: 30px;
   overflow: hidden;
-  border: 1px solid rgb(42, 17, 109);
+  border: 1px solid rgb(109, 123, 255);
 }
 
 .hour-degree-container {
@@ -99,7 +99,7 @@ body {
   width: 16.66%;
   height: 100%;
   background-color: rgba(0, 0, 120, 0.5);
-  border-right: 1px solid rgb(42, 17, 109);
+  border-right: 1px solid rgb(109, 123, 255);
   text-align: center;
 }
 
@@ -109,7 +109,7 @@ body {
   height: 50%;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid rgb(42, 17, 109);
+  border-bottom: 1px solid rgb(109, 123, 255);
   font-size: 30px;
 }
 
@@ -132,7 +132,7 @@ body {
   width: 16.66%;
   height: 100%;
   background-color: rgba(0, 0, 120, 0.5);
-  border-right: 1px solid rgb(42, 17, 109);
+  border-right: 1px solid rgb(109, 123, 255);
   text-align: center;
 }
 
@@ -142,8 +142,13 @@ body {
   height: 50%;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid rgb(42, 17, 109);
+  border-bottom: 1px solid rgb(109, 123, 255);
   font-size: 30px;
+  flex-direction: column;
+}
+
+.date {
+  font-size: 20px;
 }
 
 .day-degree {
@@ -166,6 +171,18 @@ body {
   width: 50%;
   font-size: 25px;
 }
+
+.current-icon-container {
+  width: 30px;
+  position: absolute;
+  top: 10px;
+}
+
+.current-icon-container img{
+  width: 100%;
+}
+
+
 
 
 
