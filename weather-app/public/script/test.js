@@ -21,7 +21,6 @@ function convertAika(dt) {
   const dtMilliseconds = dt * 1000;
   const date = dayjs(dtMilliseconds);
   const formattedDate = date.format('DD.MM.YYYY HH:mm:ss');
-  console.log(formattedDate);
 }
 
 

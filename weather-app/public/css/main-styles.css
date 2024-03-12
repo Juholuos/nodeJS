@@ -103,7 +103,7 @@ body {
   text-align: center;
 }
 
-.hour, .degree {
+.hour {
   display: flex;
   width: 100%;
   height: 50%;
@@ -113,9 +113,32 @@ body {
   font-size: 30px;
 }
 
-.degree {
-  border-bottom: none;
+.degree-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
+
+
+.degree, .hour-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.degree {
+  font-size: 30px;
+  flex: 3;
+}
+
+.hour-state {
+  flex: 1;
+}
+
 
 .day-container {
   width: 100%;

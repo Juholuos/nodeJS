@@ -10,6 +10,7 @@ window.onload = async function() {
         const currentStateEl = document.querySelector('.current-state');
         const currentIcon = document.querySelector('.current-icon')
         const icon = data[0].icon
+      
         currentIcon.setAttribute('src', icon)
         currentDegreeEl.innerHTML = data[0].tempCelsius;
         currentStateEl.innerHTML = data[0].state;
@@ -17,8 +18,15 @@ window.onload = async function() {
         hourContainer.querySelectorAll('.degree').forEach((degree, index) => {
           if (index === date.index - 1) {
             degree.innerHTML = date.tempCelsius;
-          }
+          }  
         });
+
+        hourContainer.querySelectorAll('.hour-state').forEach((state, index) => {
+          if (index === date.index -1) {
+            state.innerHTML = date.state;
+          }
+        })
+
         hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
           if (index === date.index - 1) {
             hour.innerHTML = date.time;

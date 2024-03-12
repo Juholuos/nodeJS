@@ -1,42 +1,41 @@
 const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path')
-
 const apiKey = '1fcf47879262ce7681e31f9bec355bb0'
-let lat = 61.8699
-let lon = 28.87999
-let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`
-const cityUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&appid=${apiKey}`
 
+let lat = 12;
+let lon = 31;
+
+const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`
+const cityUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&appid=${apiKey}`
 
 function getCityName() {
   fetch(cityUrl)
     .then(response => response.json())
     .then(data => {
       const cityName = data[0].name;
-      updateLocation(cityName)
+      cityLat = data[0].lat
+      cityLon = data[0].lon
+      updateLocation(cityName, cityLat, cityLon)
     })
     .catch(error => {
       console.error('Error fetching city data:', error)
     })
 }
 
-
-
-function updateLocation(cityName) {
+function updateLocation(cityName, cityLat, cityLon) {
   const date = dayjs().format('HH:mm, DD.MM.YYYY')
   let locationData = [];
 
   const locationObj = {
     location: cityName,
-    date: date
+    date: date,
+    lat: cityLat,
+    lon: cityLon
   }
   locationData.push(locationObj);
   writeToFile('location.json', locationData);
 }
-
-
-
 
 // Fetch day data
 function updateWeatherData() {
