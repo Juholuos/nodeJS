@@ -1,6 +1,6 @@
-const updateWeatherData = require('../../api/weather-api');
+const { fetchWeatherData, cityName } = require('../../api/weather-api');
 const dayjs = require('dayjs');
-
+console.log(cityName);
 let result;
 console.log('Scheduler running');
 
@@ -17,7 +17,7 @@ setInterval(() => {
 
 function checkTime() {
   if (result % 10 === 0) {
-    updateWeatherData()
+    fetchWeatherData(cityName)
   }
 }
 

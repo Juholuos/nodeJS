@@ -1,62 +1,84 @@
-const dayjs = require('dayjs');
-const fs = require('fs');
-const path = require('path')
-const apiKey = '1fcf47879262ce7681e31f9bec355bb0'
+const dayjs = require("dayjs");
+const fs = require("fs");
+const path = require("path");
+const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let lat = 12;
-let lon = 31;
+let cityName = "sydney";
+// Capitalize first letter of city name
+cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
 
-const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`
-const cityUrl = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&appid=${apiKey}`
+let lat;
+let lon;
 
-function getCityName() {
-  fetch(cityUrl)
-    .then(response => response.json())
-    .then(data => {
-      const cityName = data[0].name;
-      cityLat = data[0].lat
-      cityLon = data[0].lon
-      updateLocation(cityName, cityLat, cityLon)
-    })
-    .catch(error => {
-      console.error('Error fetching city data:', error)
-    })
+async function updateCoordinates(cityName) {
+  const cityUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${apiKey}`;
+  try {
+    const response = await fetch(cityUrl);
+    const data = await response.json();
+    if (data.length > 0) {
+      lat = data[0].lat;
+      lon = data[0].lon;
+      console.log(
+        `Coordinates updated for ${cityName}: lat=${lat}, lon=${lon}`
+      );
+    } else {
+      console.log(`City not found ${cityName}`);
+    }
+  } catch (error) {
+    console.error("Error fetching city coordinates:", error);
+  }
+  getCityName(cityUrl)
 }
 
-function updateLocation(cityName, cityLat, cityLon) {
-  const date = dayjs().format('HH:mm, DD.MM.YYYY')
-  let locationData = [];
+function getCityName(cityUrl) {
+  fetch(cityUrl)
+  .then(response => response.json())
+  .then(data => {
+    updateLocation(cityName, lat, lon)
+  })
+  .catch(error => {
+    console.error('Error fetching city data:', error)
+  })
+}
 
+function updateLocation(cityName, lat, lon) {
+  const date = dayjs().format("HH:mm, DD.MM.YYYY");
+  let locationData = [];
+  
   const locationObj = {
     location: cityName,
     date: date,
-    lat: cityLat,
-    lon: cityLon
-  }
+    lat: lat,
+    lon: lon,
+  };
   locationData.push(locationObj);
-  writeToFile('location.json', locationData);
+  writeToFile("location.json", locationData);
 }
 
-// Fetch day data
-function updateWeatherData() {
-  fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    let dailyData = []; 
+async function fetchWeatherData(cityName) {
+  await updateCoordinates(cityName);
+  console.log("latlon", lat, lon);
+  const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let dailyData = [];
     let hourlyData = [];
 
     // dt for next 7 days
     data.daily.forEach((value, index) => {
       if (index > 0 && index < 7) {
-        const date = dayjs().add(index, 'day').format('DD.MM.YYYY')
+        const date = dayjs().add(index, "day").format("DD.MM.YYYY");
         // Day name
         const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
           weekday: "short",
         });
-        const maxTemp = `${(value.temp.max).toFixed(0)}°`;
-        const minTemp = `${(value.temp.min).toFixed(0)}°`;
+        const maxTemp = `${value.temp.max.toFixed(0)}°`;
+        const minTemp = `${value.temp.min.toFixed(0)}°`;
         const dayState = value.weather[0].main;
         const icon = value.weather[0].icon;
+        
         let dailyObj = {
           index: index,
           date: date,
@@ -65,16 +87,17 @@ function updateWeatherData() {
           maxTemp: maxTemp,
           minTemp: minTemp,
           state: dayState,
-          icon: icon
+          icon: icon,
         };
         dailyData.push(dailyObj);
       }
     });
+    writeToFile("dailyData.json", dailyData);
 
     // HourlyData
     data.hourly.forEach((value, index) => {
-      if(index >= 0 && index < 7) {
-        const time = dayjs().add(index, 'hour').format('HH:mm')
+      if (index >= 0 && index < 7) {
+        const time = dayjs().add(index, "hour").format("HH:mm");
         const icon = value.weather[0].icon;
         let hourlyObj = {
           index: index,
@@ -82,36 +105,39 @@ function updateWeatherData() {
           dt: value.dt,
           tempCelsius: `${value.temp.toFixed(0)}°`,
           state: value.weather[0].main,
-          icon: `https://openweathermap.org/img/wn/${icon}@2x.png`
-        }
+          icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
+        };
         hourlyData.push(hourlyObj);
       }
-    })
-
-    writeToFile('hourlyData.json', hourlyData)
-    writeToFile('dailyData.json', dailyData)
-    getCityName();
-  })
-  .catch(error => console.error('Error fetching weather data:', error))
+    });
+    writeToFile("hourlyData.json", hourlyData);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+  }
+  updateWeatherData(url);
 }
 
-updateWeatherData();
-
+function updateWeatherData(url) {
+  fetch(url)
+    .then((response) => response.json())
+    .catch((error) => console.error("Error fetching weather data:", error));
+}
+  
 function writeToFile(filename, data) {
-  const currentTime = dayjs().format('HH:mm');
-  const filePath = path.join(__dirname, '..', 'data', filename);
+  const currentTime = dayjs().format("HH:mm");
+  const filePath = path.join(__dirname, "..", "data", filename);
   fs.writeFile(filePath, JSON.stringify(data), (err) => {
     if (err) {
-      console.error('Error writing to JSON file:', err);
+      console.error("Error writing to JSON file:", err);
     } else {
       console.log(`${filename} has been written succesfully at ${currentTime}`);
     }
-  })
+  });
 }
 
-module.exports = updateWeatherData
-
-
-
-
-
+fetchWeatherData(cityName);
+  
+module.exports = {
+  fetchWeatherData: fetchWeatherData,
+  cityName: cityName
+}
