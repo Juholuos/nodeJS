@@ -1,9 +1,11 @@
 const dayjs = require("dayjs");
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc);
 const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "sydney";
+let cityName = "new york";
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
 
@@ -41,6 +43,10 @@ function getCityName(cityUrl) {
   })
 }
 
+// function localTime(timeZoneOffset, index) {
+
+// }
+
 function updateLocation(cityName, lat, lon) {
   const date = dayjs().format("HH:mm, DD.MM.YYYY");
   let locationData = [];
@@ -55,6 +61,10 @@ function updateLocation(cityName, lat, lon) {
   writeToFile("location.json", locationData);
 }
 
+// function getTimeZoneOffset(data) {
+//  return data.timezone_offset;
+// }
+
 async function fetchWeatherData(cityName) {
   await updateCoordinates(cityName);
   console.log("latlon", lat, lon);
@@ -65,7 +75,6 @@ async function fetchWeatherData(cityName) {
     const data = await response.json();
     let dailyData = [];
     let hourlyData = [];
-
     // dt for next 7 days
     data.daily.forEach((value, index) => {
       if (index > 0 && index < 7) {
@@ -88,20 +97,28 @@ async function fetchWeatherData(cityName) {
           minTemp: minTemp,
           state: dayState,
           icon: icon,
+          // timezoneOffset: getTimeZoneOffset(data)
         };
         dailyData.push(dailyObj);
       }
     });
     writeToFile("dailyData.json", dailyData);
-
+    
     // HourlyData
     data.hourly.forEach((value, index) => {
       if (index >= 0 && index < 7) {
-        const time = dayjs().add(index, "hour").format("HH:mm");
+        const timeZoneOffset = data.timezone_offset;
+
+        const utcTime = dayjs.utc();
+        const localTimeStart = utcTime.add(timeZoneOffset, 'second');
+        const localTime = localTimeStart.add(index, 'hour')
+        console.log('localTime', localTime.format('HH:mm'));
+        
         const icon = value.weather[0].icon;
+
         let hourlyObj = {
           index: index,
-          time: time,
+          time: localTime.format('HH:mm'),
           dt: value.dt,
           tempCelsius: `${value.temp.toFixed(0)}°`,
           state: value.weather[0].main,
@@ -114,14 +131,14 @@ async function fetchWeatherData(cityName) {
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
-  updateWeatherData(url);
+  // updateWeatherData(url);
 }
 
-function updateWeatherData(url) {
-  fetch(url)
-    .then((response) => response.json())
-    .catch((error) => console.error("Error fetching weather data:", error));
-}
+// function updateWeatherData(url) {
+//   fetch(url)
+//     .then((response) => response.json())
+//     .catch((error) => console.error("Error fetching weather data:", error));
+// }
   
 function writeToFile(filename, data) {
   const currentTime = dayjs().format("HH:mm");

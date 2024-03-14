@@ -4,6 +4,7 @@ window.onload = async function() {
   await fetch('http://localhost:3000/data/hourlyData.json')
     .then(response => response.json())
     .then(data => {
+      console.log(data);
       data.forEach(date => {
         const hourContainer = document.querySelector('.hour-container');
         const currentDegreeEl = document.querySelector('.current-degree');
@@ -20,18 +21,18 @@ window.onload = async function() {
             degree.innerHTML = date.tempCelsius;
           }  
         });
+        
+        hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
+          if (index === date.index - 1) {
+            hour.innerHTML = date.time;
+          }
+        });
 
         hourContainer.querySelectorAll('.hour-state').forEach((state, index) => {
           if (index === date.index -1) {
             state.innerHTML = date.state;
           }
         })
-
-        hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
-          if (index === date.index - 1) {
-            hour.innerHTML = date.time;
-          }
-        });
       });
     });
 
