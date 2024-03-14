@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "new york";
+let cityName = "cairo";
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
 
@@ -36,40 +36,40 @@ function getCityName(cityUrl) {
   fetch(cityUrl)
   .then(response => response.json())
   .then(data => {
-    updateLocation(cityName, lat, lon)
+    const country = data[0].country;
+    updateLocation(cityName, lat, lon, country)
   })
   .catch(error => {
     console.error('Error fetching city data:', error)
   })
 }
 
-// function localTime(timeZoneOffset, index) {
+function getLocalTime(timeZoneOffset, index) {
+  const utcTime = dayjs.utc();
+  const localTimeStart = utcTime.add(timeZoneOffset, 'second');
+  const localTime = localTimeStart.add(index, 'hour')
+  return localTime.format('HH:mm');
+}
 
-// }
-
-function updateLocation(cityName, lat, lon) {
+function updateLocation(cityName, lat, lon, country) {
   const date = dayjs().format("HH:mm, DD.MM.YYYY");
   let locationData = [];
   
   const locationObj = {
     location: cityName,
+    country: country,
     date: date,
     lat: lat,
     lon: lon,
   };
   locationData.push(locationObj);
   writeToFile("location.json", locationData);
+  return locationData;
 }
-
-// function getTimeZoneOffset(data) {
-//  return data.timezone_offset;
-// }
 
 async function fetchWeatherData(cityName) {
   await updateCoordinates(cityName);
-  console.log("latlon", lat, lon);
   const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`;
-
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -108,18 +108,13 @@ async function fetchWeatherData(cityName) {
     data.hourly.forEach((value, index) => {
       if (index >= 0 && index < 7) {
         const timeZoneOffset = data.timezone_offset;
-
-        const utcTime = dayjs.utc();
-        const localTimeStart = utcTime.add(timeZoneOffset, 'second');
-        const localTime = localTimeStart.add(index, 'hour')
-        console.log('localTime', localTime.format('HH:mm'));
-        
+        const localTime = getLocalTime(timeZoneOffset, index)
         const icon = value.weather[0].icon;
 
         let hourlyObj = {
           index: index,
-          time: localTime.format('HH:mm'),
           dt: value.dt,
+          localTime: localTime,
           tempCelsius: `${value.temp.toFixed(0)}°`,
           state: value.weather[0].main,
           icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
@@ -131,15 +126,8 @@ async function fetchWeatherData(cityName) {
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
-  // updateWeatherData(url);
 }
 
-// function updateWeatherData(url) {
-//   fetch(url)
-//     .then((response) => response.json())
-//     .catch((error) => console.error("Error fetching weather data:", error));
-// }
-  
 function writeToFile(filename, data) {
   const currentTime = dayjs().format("HH:mm");
   const filePath = path.join(__dirname, "..", "data", filename);
@@ -156,5 +144,6 @@ fetchWeatherData(cityName);
   
 module.exports = {
   fetchWeatherData: fetchWeatherData,
-  cityName: cityName
+  cityName: cityName,
+  locationData: updateLocation
 }

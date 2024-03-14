@@ -1,6 +1,5 @@
 window.onload = async function() {
   console.log('Toimii!');
-  
   await fetch('http://localhost:3000/data/hourlyData.json')
     .then(response => response.json())
     .then(data => {
@@ -24,7 +23,7 @@ window.onload = async function() {
         
         hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
           if (index === date.index - 1) {
-            hour.innerHTML = date.time;
+            hour.innerHTML = date.localTime;
           }
         });
 
@@ -61,7 +60,7 @@ window.onload = async function() {
     .then(data => {
       const cityEl = document.querySelector('.city-header');
       const dateEl = document.querySelector('.time-header');
-      cityEl.innerHTML = data[0].location;
+      cityEl.innerHTML = `${data[0].location}, ${data[0].country}`;
       dateEl.innerHTML = data[0].date;
     }).catch(error => console.error('error fetching', error))
 };
