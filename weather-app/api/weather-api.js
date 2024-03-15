@@ -5,7 +5,8 @@ const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "cairo";
+let cityName = "Sydney";
+
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
 
@@ -64,7 +65,6 @@ function updateLocation(cityName, lat, lon, country) {
   };
   locationData.push(locationObj);
   writeToFile("location.json", locationData);
-  return locationData;
 }
 
 async function fetchWeatherData(cityName) {
@@ -145,5 +145,6 @@ fetchWeatherData(cityName);
 module.exports = {
   fetchWeatherData: fetchWeatherData,
   cityName: cityName,
-  locationData: updateLocation
 }
+
+require('../public/script/scheduler')

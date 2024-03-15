@@ -1,10 +1,9 @@
-const { fetchWeatherData, cityName, locationData } = require('../../api/weather-api');
+const { fetchWeatherData, cityName } = require('../../api/weather-api');
 const dayjs = require('dayjs');
-let result;
 console.log('Scheduler running');
-
-// Tiedosto ottaa citynamen vain tallennushetkellä weather-apista.
-// Testaa ottaa cityname päivitetystä objektista, äläkä suoraan tiedostosta
+const fs = require('fs');
+const path = require('path')
+let result;
 
 function runScheduler() {
   function updateResult() {
@@ -20,13 +19,14 @@ function runScheduler() {
   
   // update every 10 minutes
   function checkTime() {
-    if (result % 1 === 0) {
+    if (result % 10 === 0) {
       fetchWeatherData(cityName)
     }
   }
 }  
 
 runScheduler();
+
 
 
 
