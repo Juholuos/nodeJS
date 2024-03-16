@@ -1,3 +1,4 @@
+const { time } = require("console");
 const dayjs = require("dayjs");
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc);
@@ -33,7 +34,7 @@ async function updateCoordinates(cityName) {
   getCityName(cityUrl)
 }
 
-function getCityName(cityUrl) {
+function getCityName(cityUrl, timeZoneOffset) {
   fetch(cityUrl)
   .then(response => response.json())
   .then(data => {
@@ -49,11 +50,14 @@ function getLocalTime(timeZoneOffset, index) {
   const utcTime = dayjs.utc();
   const localTimeStart = utcTime.add(timeZoneOffset, 'second');
   const localTime = localTimeStart.add(index, 'hour')
-  return localTime.format('HH:mm');
+  return localTime.format('HH:mm, DD.MM.YYYY');
 }
 
 function updateLocation(cityName, lat, lon, country) {
-  const date = dayjs().format("HH:mm, DD.MM.YYYY");
+  const utcTime = dayjs().utc(); 
+  const date = utcTime.format('HH:mm')
+
+  console.log('updateLocation: ', country);
   let locationData = [];
   
   const locationObj = {
@@ -64,6 +68,7 @@ function updateLocation(cityName, lat, lon, country) {
     lon: lon,
   };
   locationData.push(locationObj);
+  console.log(locationObj);
   writeToFile("location.json", locationData);
 }
 
@@ -73,6 +78,7 @@ async function fetchWeatherData(cityName) {
   try {
     const response = await fetch(url);
     const data = await response.json();
+  
     let dailyData = [];
     let hourlyData = [];
     // dt for next 7 days
@@ -97,7 +103,6 @@ async function fetchWeatherData(cityName) {
           minTemp: minTemp,
           state: dayState,
           icon: icon,
-          // timezoneOffset: getTimeZoneOffset(data)
         };
         dailyData.push(dailyObj);
       }
@@ -109,6 +114,7 @@ async function fetchWeatherData(cityName) {
       if (index >= 0 && index < 7) {
         const timeZoneOffset = data.timezone_offset;
         const localTime = getLocalTime(timeZoneOffset, index)
+        console.log(localTime);
         const icon = value.weather[0].icon;
 
         let hourlyObj = {

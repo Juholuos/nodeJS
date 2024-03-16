@@ -4,7 +4,13 @@ window.onload = async function() {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      data.forEach(date => {
+      data.forEach((date, index) => {
+        const dateEl = document.querySelector('.time-header');
+        // dateEl.innerHTML = date.localTime;
+        if (index === 0) {
+          dateEl.innerHTML = date.localTime;
+        }
+
         const hourContainer = document.querySelector('.hour-container');
         const currentDegreeEl = document.querySelector('.current-degree');
         const currentStateEl = document.querySelector('.current-state');
@@ -15,18 +21,27 @@ window.onload = async function() {
         currentDegreeEl.innerHTML = data[0].tempCelsius;
         currentStateEl.innerHTML = data[0].state;
 
+        hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
+          if (index === date.index - 1) {
+            console.log(date.localTime);
+            hour.innerHTML = date.localTime.split(",")[0].trim();
+          }
+        });
+
+        hourContainer.querySelectorAll('.degree-container').forEach((container, index) => {
+          if (index === date.index - 1) {
+            const iconContainer = container.querySelector('.hourly-icon-container');
+            const icon = iconContainer.querySelector('.hourly-icon');
+            icon.src = date.icon;
+          }  
+        });
+
         hourContainer.querySelectorAll('.degree').forEach((degree, index) => {
           if (index === date.index - 1) {
             degree.innerHTML = date.tempCelsius;
           }  
         });
         
-        hourContainer.querySelectorAll('.hour').forEach((hour, index) => {
-          if (index === date.index - 1) {
-            hour.innerHTML = date.localTime;
-          }
-        });
-
         hourContainer.querySelectorAll('.hour-state').forEach((state, index) => {
           if (index === date.index -1) {
             state.innerHTML = date.state;
@@ -59,8 +74,6 @@ window.onload = async function() {
     .then(response => response.json())
     .then(data => {
       const cityEl = document.querySelector('.city-header');
-      const dateEl = document.querySelector('.time-header');
       cityEl.innerHTML = `${data[0].location}, ${data[0].country}`;
-      dateEl.innerHTML = data[0].date;
     }).catch(error => console.error('error fetching', error))
 };
