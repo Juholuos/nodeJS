@@ -6,7 +6,6 @@ window.onload = async function() {
       console.log(data);
       data.forEach((date, index) => {
         const dateEl = document.querySelector('.time-header');
-        // dateEl.innerHTML = date.localTime;
         if (index === 0) {
           dateEl.innerHTML = date.localTime;
         }

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juhon sää</title>
   <link rel="stylesheet" href="css/main-styles.css">
+  <link rel="stylesheet" href="css/next-day.css">
 </head>
 <body>
   <div class="container">
@@ -84,6 +85,52 @@
           </div>
         </div>
       </div>
+      <div class="info-container">
+        <div class="current-day-info-container">
+          <div class="info-header">Today</div>
+          <div class="today-info-container">
+            <div class="temperature category">
+              <div class="header">Temperature</div>
+              <div>10 | 5</div>
+            </div>
+            <div class="rain category">
+              <div class="header">Rain</div>
+              <div>15mm</div>
+            </div>
+            <div class="wind category">
+              <div class="header">Wind</div>
+              <div>15m/s</div>
+            </div>
+
+            <div class="humidity category">
+              <div class="header">Humidity</div>
+              <div>22%</div>
+            </div>
+          </div>
+        </div>
+        <div class="next-day-info-container">
+          <div class="info-header">Tomorrow</div>
+          <div class="today-info-container">
+            <div class="temperature category">
+              <div class="header">Temperature</div>
+              <div>10 | 5</div>
+            </div>
+            <div class="rain category">
+              <div class="header">Rain</div>
+              <div>15mm</div>
+            </div>
+            <div class="wind category">
+              <div class="header">Wind</div>
+              <div>15m/s</div>
+            </div>
+
+            <div class="humidity category">
+              <div class="header">Humidity</div>
+              <div>22%</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="day-container">
         <div class="day-degree-container">
           <div class="day">
@@ -154,6 +201,7 @@
       </div>
     </div>
   </div>
-  <script type="module" src="./script/load-data.js"></script>
+  <script type="module" src="./script/load/load-data.js"></script>
+  <script type="module" src="./script/load/load-info.js"></script>
 </body>
 </html>

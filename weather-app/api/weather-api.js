@@ -1,4 +1,4 @@
-const { time } = require("console");
+const { time, log } = require("console");
 const dayjs = require("dayjs");
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc);
@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "Sydney";
+let cityName = "savonlinna";
 
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
@@ -68,7 +68,6 @@ function updateLocation(cityName, lat, lon, country) {
     lon: lon,
   };
   locationData.push(locationObj);
-  console.log(locationObj);
   writeToFile("location.json", locationData);
 }
 
@@ -78,17 +77,35 @@ async function fetchWeatherData(cityName) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-  
+    let infoData = [];
     let dailyData = [];
     let hourlyData = [];
-    // dt for next 7 days
+    // dailyData
     data.daily.forEach((value, index) => {
-      if (index > 0 && index < 7) {
-        const date = dayjs().add(index, "day").format("DD.MM.YYYY");
+      // get today weather
+      if (index === 0) {
+        const todayMin = value.temp.min
+        const todayMax = value.temp.max
+        const todayRain = value.rain;
+        const todayWind = value.wind_speed;
+        const todayHumidity = value.humidity;
+        let infoObj = {
+          todayMin: todayMin,
+          todayMax: todayMax,
+          todayRain: todayRain,
+          todayWind: todayWind,
+          todayHumidity: todayHumidity
+        }
+        infoData.push(infoObj);
+      }
+      else if (index < 7) {
+        const localTimeOffset = data.timezone_offset;
+        const date = dayjs().add(index, "day").add(localTimeOffset, 'second').format("DD.MM.YYYY");
         // Day name
         const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
           weekday: "short",
         });
+
         const maxTemp = `${value.temp.max.toFixed(0)}°`;
         const minTemp = `${value.temp.min.toFixed(0)}°`;
         const dayState = value.weather[0].main;
@@ -107,14 +124,14 @@ async function fetchWeatherData(cityName) {
         dailyData.push(dailyObj);
       }
     });
+    writeToFile("infoData.json", infoData)
     writeToFile("dailyData.json", dailyData);
     
     // HourlyData
     data.hourly.forEach((value, index) => {
-      if (index >= 0 && index < 7) {
+      if (index < 7) {
         const timeZoneOffset = data.timezone_offset;
         const localTime = getLocalTime(timeZoneOffset, index)
-        console.log(localTime);
         const icon = value.weather[0].icon;
 
         let hourlyObj = {
@@ -129,6 +146,22 @@ async function fetchWeatherData(cityName) {
       }
     });
     writeToFile("hourlyData.json", hourlyData);
+
+    // // infoData
+    // const current = data.current;
+    // // console.log(current);
+    
+    // const currentRain = data.current.rain
+    // console.log(currentRain);
+
+    // // wind speed in m/s
+    // const currentWind = data.current.wind_speed;
+    // console.log(currentWind);
+
+    // // Humidity in %
+    // const currentHumidity = data.current.humidity;
+    // console.log(currentHumidity);
+  
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
