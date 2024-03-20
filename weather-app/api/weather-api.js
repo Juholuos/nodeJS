@@ -1,12 +1,12 @@
 const { time, log } = require("console");
 const dayjs = require("dayjs");
-const utc = require('dayjs/plugin/utc')
+const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "savonlinna";
+let cityName = "new york";
 
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
@@ -31,35 +31,35 @@ async function updateCoordinates(cityName) {
   } catch (error) {
     console.error("Error fetching city coordinates:", error);
   }
-  getCityName(cityUrl)
+  getCityName(cityUrl);
 }
 
 function getCityName(cityUrl, timeZoneOffset) {
   fetch(cityUrl)
-  .then(response => response.json())
-  .then(data => {
-    const country = data[0].country;
-    updateLocation(cityName, lat, lon, country)
-  })
-  .catch(error => {
-    console.error('Error fetching city data:', error)
-  })
+    .then((response) => response.json())
+    .then((data) => {
+      const country = data[0].country;
+      updateLocation(cityName, lat, lon, country);
+    })
+    .catch((error) => {
+      console.error("Error fetching city data:", error);
+    });
 }
 
 function getLocalTime(timeZoneOffset, index) {
   const utcTime = dayjs.utc();
-  const localTimeStart = utcTime.add(timeZoneOffset, 'second');
-  const localTime = localTimeStart.add(index, 'hour')
-  return localTime.format('HH:mm, DD.MM.YYYY');
+  const localTimeStart = utcTime.add(timeZoneOffset, "second");
+  const localTime = localTimeStart.add(index, "hour");
+  return localTime.format("HH:mm, DD.MM.YYYY");
 }
 
 function updateLocation(cityName, lat, lon, country) {
-  const utcTime = dayjs().utc(); 
-  const date = utcTime.format('HH:mm')
+  const utcTime = dayjs().utc();
+  const date = utcTime.format("HH:mm");
 
-  console.log('updateLocation: ', country);
+  console.log("updateLocation: ", country);
   let locationData = [];
-  
+
   const locationObj = {
     location: cityName,
     country: country,
@@ -71,6 +71,12 @@ function updateLocation(cityName, lat, lon, country) {
   writeToFile("location.json", locationData);
 }
 
+function dateObj(dates, dayname, date, index) {
+  dates[index] = `${date}-${dayname}`;
+  console.log(dates);
+  return dates
+}
+
 async function fetchWeatherData(cityName) {
   await updateCoordinates(cityName);
   const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${apiKey}`;
@@ -80,37 +86,59 @@ async function fetchWeatherData(cityName) {
     let infoData = [];
     let dailyData = [];
     let hourlyData = [];
+    let dates = {};
+
     // dailyData
     data.daily.forEach((value, index) => {
+      // Day name
+      const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
+        weekday: "short",
+      });
+      const localTimeOffset = data.timezone_offset;
+      const date = dayjs()
+          .add(index, "day")
+          .add(localTimeOffset, "second")
+          .format("DD.MM.YYYY");
       // get today weather
       if (index === 0) {
-        const todayMin = value.temp.min
-        const todayMax = value.temp.max
+        const todayMin = value.temp.min;
+        const todayMax = value.temp.max;
         const todayRain = value.rain;
         const todayWind = value.wind_speed;
         const todayHumidity = value.humidity;
-        let infoObj = {
+        let infoObj1 = {
           todayMin: todayMin,
           todayMax: todayMax,
           todayRain: todayRain,
           todayWind: todayWind,
-          todayHumidity: todayHumidity
-        }
-        infoData.push(infoObj);
-      }
-      else if (index < 7) {
-        const localTimeOffset = data.timezone_offset;
-        const date = dayjs().add(index, "day").add(localTimeOffset, 'second').format("DD.MM.YYYY");
-        // Day name
-        const dayname = new Date(value.dt * 1000).toLocaleDateString("en", {
-          weekday: "short",
-        });
+          todayHumidity: todayHumidity,
+        };
+        dateObj(dates, dayname, date, index)
+        infoData.push(infoObj1);
+      } else if (index === 1) {
+        const tomorrowMin = value.temp.min;
+        const tomorrowMax = value.temp.max;
+        const tomorrowRain = value.rain;
+        const tomorrowWind = value.wind_speed;
+        const tomorrowHumidity = value.humidity;
+        let infoObj2 = {
+          tomorrowMin: tomorrowMin,
+          tomorrowMax: tomorrowMax,
+          tomorrowRain: tomorrowRain,
+          tomorrowWind: tomorrowWind,
+          tomorrowHumidity: tomorrowHumidity,
+        }; 
+        dateObj(dates, dayname, date, index)
+        infoData.push(infoObj2)
+        } else if (index > 0 && index < 8) {
+        
+        dateObj(dates, dayname, date, index)
 
         const maxTemp = `${value.temp.max.toFixed(0)}°`;
         const minTemp = `${value.temp.min.toFixed(0)}°`;
         const dayState = value.weather[0].main;
         const icon = value.weather[0].icon;
-        
+
         let dailyObj = {
           index: index,
           date: date,
@@ -124,14 +152,16 @@ async function fetchWeatherData(cityName) {
         dailyData.push(dailyObj);
       }
     });
-    writeToFile("infoData.json", infoData)
+
+    writeToFile("dates.json", dates);
+    writeToFile("infoData.json", infoData);
     writeToFile("dailyData.json", dailyData);
-    
+
     // HourlyData
     data.hourly.forEach((value, index) => {
       if (index < 7) {
         const timeZoneOffset = data.timezone_offset;
-        const localTime = getLocalTime(timeZoneOffset, index)
+        const localTime = getLocalTime(timeZoneOffset, index);
         const icon = value.weather[0].icon;
 
         let hourlyObj = {
@@ -146,22 +176,6 @@ async function fetchWeatherData(cityName) {
       }
     });
     writeToFile("hourlyData.json", hourlyData);
-
-    // // infoData
-    // const current = data.current;
-    // // console.log(current);
-    
-    // const currentRain = data.current.rain
-    // console.log(currentRain);
-
-    // // wind speed in m/s
-    // const currentWind = data.current.wind_speed;
-    // console.log(currentWind);
-
-    // // Humidity in %
-    // const currentHumidity = data.current.humidity;
-    // console.log(currentHumidity);
-  
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
@@ -180,10 +194,11 @@ function writeToFile(filename, data) {
 }
 
 fetchWeatherData(cityName);
-  
+
 module.exports = {
   fetchWeatherData: fetchWeatherData,
   cityName: cityName,
-}
+  dates: dateObj
+};
 
-require('../public/script/scheduler')
+require("../public/script/scheduler");
