@@ -6,13 +6,14 @@ const fs = require("fs");
 const path = require("path");
 const apiKey = "1fcf47879262ce7681e31f9bec355bb0";
 
-let cityName = "new york";
+let cityName = 'savonlinna';
 
 // Capitalize first letter of city name
 cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
 
 let lat;
 let lon;
+
 
 async function updateCoordinates(cityName) {
   const cityUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${apiKey}`;
