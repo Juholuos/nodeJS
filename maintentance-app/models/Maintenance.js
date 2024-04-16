@@ -13,7 +13,7 @@ const MaintenanceSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, 'Auton malli on oltava enintään 50 merkkiä'],
   },
-  maintentanceDate: {
+  maintenanceDate: {
     type: Date,
     required: [true, 'Anna huoltopäivämäärä'],
   },

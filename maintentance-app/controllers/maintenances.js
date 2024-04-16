@@ -14,10 +14,23 @@ const getAllMaintenances = async (req, res) => {
 };
 
 const createMaintenance = async (req, res) => {
-  // const maintenance = await Maintenance.create(req.body);
   try {
-    const maintenance = await Maintenance.create(req.body);
-    res.status(200).json({ maintenance });
+    const newMaintenance = new Maintenance({
+      carMake: req.body.carMake,
+      carModel: req.body.carModel,
+      maintenanceDate: req.body.maintenanceDate,
+      mileage: req.body.mileage,
+      details: req.body.details,
+    });
+    console.log(newMaintenance);
+    const maintenance = await newMaintenance.save();
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        maintenance,
+      },
+    });
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe lisättäessä huoltoa:', error);
@@ -36,7 +49,7 @@ const getMaintenance = async (req, res) => {
     }
     res.status(200).json({ maintenance });
   } catch (error) {
-    console.log('Nope, ', error);
+    console.log(error);
   }
 };
 
@@ -53,30 +66,25 @@ const deleteMaintenance = async (req, res) => {
   }
 };
 
-const updateMaintenance = async (req, res) => {
-  try {
-    const { id: maintenanceID } = req.params;
+const updateMaintenance = async (req, res, next) => {
+  const { id: maintenanceID } = req.params;
 
-    const maintenance = await Maintenance.findOneAndUpdate(
-      { _id: maintenanceID },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    if (!maintenance) {
-      return res.status(404).json({ msg: 'Huoltoa ei löytynyt' });
+  const maintenance = await Maintenance.findOneAndUpdate(
+    { _id: maintenanceID },
+    req.body,
+    {
+      new: true,
+      runValidators: true,
     }
+  );
 
-    console.log(maintenance);
-
-    res.status(200).json({ maintenance });
-  } catch (error) {
-    console.error('Virhe päivittäessä huoltoa:', error);
-    res.status(500).json({ msg: 'Huollon päivitys ei onnistunut' });
+  if (!maintenance) {
+    return res
+      .status(404)
+      .json({ msg: `Huoltoa ei löytynyt, ID ${maintenanceID}` });
   }
+
+  res.status(200).json({ maintenance });
 };
 
 module.exports = {

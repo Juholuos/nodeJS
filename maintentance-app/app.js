@@ -4,22 +4,22 @@ const PORT = 3000;
 const uri =
   'mongodb+srv://juholuos:Jussipussi123@maintenanceappcluster.5wdxgxd.mongodb.net/maintenance?retryWrites=true&w=majority&appName=MaintenanceAppCluster';
 const connectDB = require('./db/connect');
+const bodyParser = require('body-parser');
+const maintenanceRoutes = require('./routes/maintenances');
 
-const {
-  getAllMaintenances,
-  createMaintenance,
-  getMaintenance,
-  deleteMaintenance,
-  updateMaintenance,
-} = require('./controllers/maintenances');
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// ohita favicon
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+app.use('/maintenance', maintenanceRoutes);
 
 app.use(express.json());
 
-app.get('/', getAllMaintenances);
-app.get('/:id', getMaintenance);
-app.delete('/:id', deleteMaintenance);
-app.post('/', createMaintenance);
-app.patch('/:id', updateMaintenance);
+app.use(express.static('public'));
 
 const start = async () => {
   try {

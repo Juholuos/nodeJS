@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="background-image"></div>
+  <div class="top-bar"></div>
+  <div class="main-content">
+    <div class="table-container">
+      <table>
+
+        <thead>
+          <tr>
+            <th>Auton malli</th>
+            <th>Auton merkki</th>
+            <th>Päivämäärä</th>
+            <th>Kilometrit</th>
+            <th>Lisätiedot</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Toyota Corolla</td>
+            <td>Toyota</td>
+            <td>2024-04-18</td>
+            <td>50000 km</td>
+            <td>Tarvitaan öljynvaihto</td>
+          </tr>
+          <tr>
+            <td>Toyota Corolla</td>
+            <td>Toyota</td>
+            <td>2024-04-18</td>
+            <td>50000 km</td>
+            <td>Tarvitaan öljynvaihto</td>
+          </tr>
+          <tr>
+            <td>Toyota Corolla</td>
+            <td>Toyota</td>
+            <td>2024-04-18</td>
+            <td>50000 km</td>
+            <td>Tarvitaan öljynvaihto</td>
+          </tr>
+          <tr>
+            <td>Toyota Corolla</td>
+            <td>Toyota</td>
+            <td>2024-04-18</td>
+            <td>50000 km</td>
+            <td>Tarvitaan öljynvaihto</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="form-container">
+      <form action="http://localhost:3000/maintenance" method="post">
+        <div class="form-item">
+          <label for="carMake">Auton merkki</label>
+          <input type="text" id="carMake" name="carMake" placeholder="Syötä auton merkki">
+        </div>
+        <div class="form-item">
+          <label for="carModel">Auton malli</label>
+          <input type="text" id="carModel" name="carModel" placeholder="Syötä auton malli">
+        </div>
+        <div class="form-item">
+          <label for="maintenanceDate">Päivämäärä</label>
+          <input type="text" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä">
+        </div>
+        <div class="form-item">
+          <label for="mileage">Kilometrit</label>
+          <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit huollon aikana">
+        </div>
+        <div class="form-item">
+          <label for="details">Lisätiedot huollosta</label>
+          <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot">
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
