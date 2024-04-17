@@ -7,17 +7,14 @@ const connectDB = require('./db/connect');
 const bodyParser = require('body-parser');
 const maintenanceRoutes = require('./routes/maintenances');
 
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(express.json());
 
 // ohita favicon
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 app.use('/maintenance', maintenanceRoutes);
-
-app.use(express.json());
 
 app.use(express.static('public'));
 

@@ -15,6 +15,7 @@ const getAllMaintenances = async (req, res) => {
 
 const createMaintenance = async (req, res) => {
   try {
+    console.log(req.body);
     const newMaintenance = new Maintenance({
       carMake: req.body.carMake,
       carModel: req.body.carModel,
@@ -22,14 +23,11 @@ const createMaintenance = async (req, res) => {
       mileage: req.body.mileage,
       details: req.body.details,
     });
-    console.log(newMaintenance);
     const maintenance = await newMaintenance.save();
 
     res.status(201).json({
       status: 'success',
-      data: {
-        maintenance,
-      },
+      maintenance,
     });
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
