@@ -25,10 +25,7 @@ const createMaintenance = async (req, res) => {
     });
     const maintenance = await newMaintenance.save();
 
-    res.status(201).json({
-      status: 'success',
-      maintenance,
-    });
+    res.status(200).redirect(`/`);
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe lisättäessä huoltoa:', error);

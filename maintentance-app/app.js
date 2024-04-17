@@ -6,6 +6,9 @@ const uri =
 const connectDB = require('./db/connect');
 const bodyParser = require('body-parser');
 const maintenanceRoutes = require('./routes/maintenances');
+const indexRoute = require('./routes/index');
+
+app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -13,6 +16,8 @@ app.use(express.json());
 
 // ohita favicon
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+app.use('/', indexRoute);
 
 app.use('/maintenance', maintenanceRoutes);
 
