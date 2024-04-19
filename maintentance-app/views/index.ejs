@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>maintenance</title>
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <div class="background-image"></div>
-  <div class="top-bar"></div>
   <div class="main-content">
     <div class="content">
       <div class="table-container">
@@ -20,16 +20,23 @@
               <th>Päivämäärä</th>
               <th>Kilometrit</th>
               <th>Lisätiedot</th>
+              <th>Muokkaa</th>
               </tr>
           </thead>
           <tbody>
             <% maintenances.forEach(maintenance => { %>
-              <tr>
-                <td><%= maintenance.carMake %></td>
+              <tr class="maintenance-row" data-id="<%= maintenance._id %>">
+                <td class="carMake"><%= maintenance.carMake %></td>
                 <td><%= maintenance.carModel %></td>
-                <td><%= maintenance.maintenanceDate %></td>
+                <td class="date-td"><%= maintenance.maintenanceDate %></td>
                 <td><%= maintenance.mileage %> km</td>
                 <td><%= maintenance.details %></td>
+                <td> 
+                  <div class="edit-delete">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> <i class="fa fa-trash" aria-hidden="true"></i> 
+                  </div>
+                </td>
+                
               </tr>
             <% }); %>
           </tbody>
@@ -39,23 +46,23 @@
         <form action="http://localhost:3000/maintenance" method="post">
           <div class="form-item">
             <label for="carMake">Auton merkki</label>
-            <input type="text" id="carMake" name="carMake" placeholder="Syötä auton merkki">
+            <input type="text" id="carMake" name="carMake" placeholder="Syötä auton merkki" required>
           </div>
           <div class="form-item">
             <label for="carModel">Auton malli</label>
-            <input type="text" id="carModel" name="carModel" placeholder="Syötä auton malli">
+            <input type="text" id="carModel" name="carModel" placeholder="Syötä auton malli" required>
           </div>
           <div class="form-item">
             <label for="maintenanceDate">Päivämäärä</label>
-            <input type="text" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä">
+            <input type="date" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä" required>
           </div>
           <div class="form-item">
             <label for="mileage">Kilometrit</label>
-            <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit huollon aikana">
+            <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit huollon aikana" required>
           </div>
           <div class="form-item">
             <label for="details">Lisätiedot huollosta</label>
-            <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot">
+            <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot" required>
           </div>
   
           <button type="submit">Submit</button>
@@ -63,5 +70,9 @@
       </div>
     </div>
   </div>
+  <script src="../scripts/delete.js"></script>
+  <script src="../scripts/edit.js"></script>
+  <script src="../scripts/formatDate.js"></script>
+  <script src="../scripts/formatModels.js"></script>
 </body>
 </html>

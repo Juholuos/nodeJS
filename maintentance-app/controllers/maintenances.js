@@ -1,4 +1,5 @@
 const Maintenance = require('../models/Maintenance');
+const dayjs = require('dayjs');
 
 const getAllMaintenances = async (req, res) => {
   try {
@@ -15,7 +16,15 @@ const getAllMaintenances = async (req, res) => {
 
 const createMaintenance = async (req, res) => {
   try {
-    console.log(req.body);
+    if (
+      !req.body.carMake ||
+      !req.body.carModel ||
+      !req.body.maintenanceDate ||
+      !req.body.mileage
+    ) {
+      return res.status(400).send('Required fields are missing');
+    }
+
     const newMaintenance = new Maintenance({
       carMake: req.body.carMake,
       carModel: req.body.carModel,
@@ -82,10 +91,25 @@ const updateMaintenance = async (req, res, next) => {
   res.status(200).json({ maintenance });
 };
 
+const renderMaintenancePage = async (req, res) => {
+  try {
+    const maintenanceID = req.params.id;
+    const maintenance = await Maintenance.findById(maintenanceID);
+    if (!maintenance) {
+      return res.status(404).send('Maintenance not found!');
+    }
+    res.render('maintenance', { maintenance });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   getAllMaintenances,
   createMaintenance,
   getMaintenance,
   updateMaintenance,
   deleteMaintenance,
+
+  renderMaintenancePage,
 };

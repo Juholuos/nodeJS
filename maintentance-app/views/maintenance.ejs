@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/styles/style.css">
+  
+</head>
+<body>
+  <div class="background-image"></div>
+  <div class="form-container">
+    <form action="http://localhost:3000/maintenance/:id" method="patch">
+      <input type="hidden" name="_method" value="PATCH">
+      <div class="form-item">
+        <label for="carMake">Auton merkki</label>
+        <input type="text" id="carMake" name="carMake" placeholder="Syötä auton merkki" value="<%= maintenance.carMake %>"required>
+      </div>
+      <div class="form-item">
+        <label for="carModel">Auton malli</label>
+        <input type="text" id="carModel" name="carModel" placeholder="Syötä auton malli" value="<%= maintenance.carModel %>"required>
+      </div>
+      <div class="form-item">
+        <label for="maintenanceDate">Päivämäärä</label>
+        <input type="date" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä" value="<%= maintenance.maintenanceDate %>" required>
+      </div>
+      <div class="form-item">
+        <label for="mileage">Kilometrit</label>
+        <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit huollon aikana" value="<%= maintenance.mileage%>" required>
+      </div>
+      <div class="form-item">
+        <label for="details">Lisätiedot huollosta</label>
+        <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot" value="<%= maintenance.details %>"required>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
