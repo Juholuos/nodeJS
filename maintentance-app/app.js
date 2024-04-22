@@ -6,7 +6,7 @@ const uri =
 const connectDB = require('./db/connect');
 const bodyParser = require('body-parser');
 const maintenanceRoutes = require('./routes/maintenances');
-const indexRoute = require('./routes/index');
+const homeRoute = require('./routes/index');
 const formatMaintenanceDate = require('./middleware/formatMaintenanceDate');
 
 app.set('view engine', 'ejs');
@@ -19,11 +19,6 @@ app.use(formatMaintenanceDate);
 // ohita favicon
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-// reititys
-app.use('/', indexRoute);
-app.use('/maintenance', maintenanceRoutes);
-
-// Palvele staattisia tiedostoja
 app.use(
   express.static('public', {
     setHeaders: (res, path, stat) => {
@@ -35,6 +30,12 @@ app.use(
     },
   })
 );
+
+// reititys
+app.use('/', homeRoute);
+app.use('/maintenance', maintenanceRoutes);
+
+// Palvele staattisia tiedostoja
 
 const start = async () => {
   try {

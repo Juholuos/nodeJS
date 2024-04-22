@@ -98,7 +98,7 @@ const renderMaintenancePage = async (req, res) => {
     if (!maintenance) {
       return res.status(404).send('Maintenance not found!');
     }
-    res.render('maintenance', { maintenance });
+    res.render('updateMaintenance', { maintenance });
   } catch (error) {
     console.error(error);
   }

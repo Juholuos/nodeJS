@@ -11,12 +11,17 @@ const {
   renderMaintenancePage,
 } = require('../controllers/maintenances');
 
+// Render maintenance page
 router.get('/:id', renderMaintenancePage);
-router.delete('/:id', deleteMaintenance); // Delete a specific maintenance record
-router.patch('/:id', updateMaintenance); // Update a specific maintenance record
-router.get('/', getAllMaintenances); // Retrieve all maintenance records
-router.post('/', createMaintenance); // Create a new maintenance record
 
+// Retrieve, update, and delete a specific maintenance record
+router
+  .route('/:id')
+  .get(getMaintenance)
+  .patch(updateMaintenance)
+  .delete(deleteMaintenance);
+
+// Retrieve all maintenance records and create a new maintenance record
 router.route('/').get(getAllMaintenances).post(createMaintenance);
 
 module.exports = router;
