@@ -11,6 +11,10 @@
   <div class="form-container">
     <form class="update-form" id="maintenance-form">
       <div class="form-item">
+        <label for="maintenanceID">Huollon ID</label>
+        <input type="textarea" id="maintenanceID" name="maintenanceID" value="<%= maintenance._id%>"readonly>
+      </div>
+      <div class="form-item">
         <label for="carMake">Auton merkki</label>
         <input type="text" id="carMake" name="carMake" placeholder="Syötä auton merkki" value="<%= maintenance.carMake %>"required>
       </div>
@@ -20,7 +24,7 @@
       </div>
       <div class="form-item">
         <label for="maintenanceDate">Päivämäärä</label>
-        <input type="date" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä" value="<%= maintenance.maintenanceDate %>" required>
+        <input type="date" id="date" name="maintenanceDate" placeholder="Syötä huollon päivämäärä" value="<%= formattedDate %>" required>
       </div>
       <div class="form-item">
         <label for="mileage">Kilometrit</label>
@@ -31,7 +35,7 @@
         <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot" value="<%= maintenance.details %>"required>
       </div>
 
-      <button type="submit">Submit</button>
+      <button type="submit">Lähetä</button>
     </form>
     <script src="../scripts/patchMaintenance.js"></script>
 </body>

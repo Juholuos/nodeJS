@@ -1,0 +1,19 @@
+.flash-message-container {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.alert {
+  font-size: 25px;
+  animation: fadeOut 5s forwards;
+}
+
+.alert-success {
+  color: green;
+}
+
+.alert-danger {
+  color: red;
+}

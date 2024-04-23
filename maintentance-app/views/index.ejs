@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>maintenance</title>
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/flash-messages.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -15,8 +16,8 @@
         <table>
           <thead>
             <tr>
-              <th>Auton malli</th>
               <th>Auton merkki</th>
+              <th>Auton malli</th>
               <th>Päivämäärä</th>
               <th>Kilometrit</th>
               <th>Lisätiedot</th>
@@ -58,14 +59,28 @@
           </div>
           <div class="form-item">
             <label for="mileage">Kilometrit</label>
-            <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit huollon aikana" required>
+            <input type="text" id="mileage" name="mileage" placeholder="Syötä auton kilometrit" required>
           </div>
           <div class="form-item">
             <label for="details">Lisätiedot huollosta</label>
             <input type="text" id="details" name="details" placeholder="Syötä huollon lisätiedot" required>
           </div>
   
-          <button type="submit">Submit</button>
+          <button type="submit">Lähetä</button>
+
+          <div class="flash-message-container">
+            <% if (flashMessages.success) { %>
+              <div class="alert alert-success">
+                <%= flashMessages.success %>
+              </div>
+            <% } %>
+            
+            <% if (flashMessages.error) { %>
+              <div class="alert alert-danger">
+                <%= flashMessages.error %>
+              </div>
+            <% } %>
+          </div>
         </form>
       </div>
     </div>

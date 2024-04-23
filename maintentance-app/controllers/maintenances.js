@@ -4,9 +4,10 @@ const dayjs = require('dayjs');
 const getAllMaintenances = async (req, res) => {
   try {
     // Haetaan kaikki huollot tietokannasta
-    const maintenances = await Maintenance.find();
+    const maintenances = await Maintenance.find().sort({ maintenanceDate: -1 });
+    console.log(maintenances);
 
-    res.status(200).json({ maintenances });
+    res.render('index', { maintenances }); // Pass the maintenance data to the EJS file
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe haettaessa huoltoja tietokannasta:', error);
@@ -34,11 +35,14 @@ const createMaintenance = async (req, res) => {
     });
     const maintenance = await newMaintenance.save();
 
+    req.flash('success', 'Huolto lisätty onnistuneesti!');
+
     res.status(200).redirect(`/`);
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe lisättäessä huoltoa:', error);
-    throw new Error('Huollon lisääminen ei onnistunut');
+    req.flash('error', 'Virhe lisättäessä huoltoa.');
+    res.redirect('/');
   }
 };
 
@@ -63,7 +67,7 @@ const deleteMaintenance = async (req, res) => {
     const maintenance = await Maintenance.findOneAndDelete({
       _id: maintenanceID,
     });
-    res.status(200).json({});
+    res.status(200).json({ message: 'Maintenance deleted successfully' });
   } catch (error) {
     console.error('Virhe poistaessa huoltoa:', error);
     throw new Error('Huollon poistaminen ei onnistunut');
@@ -87,7 +91,7 @@ const updateMaintenance = async (req, res, next) => {
       .status(404)
       .json({ msg: `Huoltoa ei löytynyt, ID ${maintenanceID}` });
   }
-
+  req.flash('success', 'Huolto päivitetty onnistuneesti!');
   res.status(200).json({ maintenance });
 };
 
@@ -98,7 +102,12 @@ const renderMaintenancePage = async (req, res) => {
     if (!maintenance) {
       return res.status(404).send('Maintenance not found!');
     }
-    res.render('updateMaintenance', { maintenance });
+
+    const formattedDate = dayjs(maintenance.maintenanceDate).format(
+      'YYYY-MM-DD'
+    );
+
+    res.render('updateMaintenance', { maintenance, formattedDate });
   } catch (error) {
     console.error(error);
   }
