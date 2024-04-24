@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 const flashMessage = require('./middleware/flashMessages');
 const maintenanceRoutes = require('./routes/maintenances');
 const homeRoute = require('./routes/index');
+const userRoute = require('./routes/user');
 const formatMaintenanceDate = require('./middleware/formatMaintenanceDate');
 const staticConfig = require('./middleware/config/static');
 
@@ -39,6 +40,7 @@ app.use(staticConfig);
 // reititys
 app.use('/', homeRoute);
 app.use('/maintenance', maintenanceRoutes);
+app.use('/user', userRoute);
 
 // Palvele staattisia tiedostoja
 

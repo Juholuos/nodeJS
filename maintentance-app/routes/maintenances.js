@@ -7,7 +7,6 @@ const {
   getMaintenance,
   deleteMaintenance,
   updateMaintenance,
-
   renderMaintenancePage,
 } = require('../controllers/maintenances');
 
