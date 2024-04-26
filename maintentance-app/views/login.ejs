@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles/login-page.css">
+</head>
+<body>
+  <div class="background-image"></div>
+  <div class="main-content">
+    <h1> Kirjaudu sisään </h1>
+    <div class="form-container">
+      <form class="form" action="/login" method="post">
+        <div class="input-field-container">
+          <div class="form-item">
+            <label for="username">Käyttäjänimi</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-item">
+            <label for="password">Salasana</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+        </div>
+        <div class="button-container">
+          <button class="submit-button" type="submit">Kirjaudu sisään</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <p>Eikö sinulla ole käyttäjää? <span class="register-here">Rekisteröidy tästä</span></p>
+</body>
+</html>

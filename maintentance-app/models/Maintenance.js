@@ -28,6 +28,7 @@ const MaintenanceSchema = new mongoose.Schema({
     trim: true,
     maxlength: [500, 'Huollon tiedot voi olla enintään 500 merkkiä pitkä'],
   },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 module.exports = mongoose.model('Maintenance', MaintenanceSchema);

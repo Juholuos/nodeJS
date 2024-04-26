@@ -18,6 +18,7 @@ const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
+    console.log('req.body:', req.body);
     if (!user) {
       return res.status(401).send('Väärä käyttäjätunnus tai salasana');
     }
@@ -27,11 +28,11 @@ const loginUser = async (req, res) => {
       return res.status(401).send('Väärä käyttäjätunnus tai salasana');
     }
 
-    const token = jwt.sign({ id: user._id }, 'secret-key', {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '30d',
     });
 
-    res.status(200).json({ message: 'Login succesful', token });
+    res.status(200).json({ message: 'Login succesful', token }); // Thunderclient
   } catch (error) {
     console.error(error);
   }

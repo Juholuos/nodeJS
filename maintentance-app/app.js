@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+require('dotenv').config();
 const uri =
   'mongodb+srv://juholuos:Jussipussi123@maintenanceappcluster.5wdxgxd.mongodb.net/maintenance?retryWrites=true&w=majority&appName=MaintenanceAppCluster';
 const connectDB = require('./db/connect');
@@ -11,6 +12,8 @@ const flashMessage = require('./middleware/flashMessages');
 const maintenanceRoutes = require('./routes/maintenances');
 const homeRoute = require('./routes/index');
 const userRoute = require('./routes/user');
+const loginRoute = require('./routes/login');
+const authMiddleware = require('./middleware/jwtAuth');
 const formatMaintenanceDate = require('./middleware/formatMaintenanceDate');
 const staticConfig = require('./middleware/config/static');
 
@@ -38,11 +41,10 @@ app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use(staticConfig);
 
 // reititys
-app.use('/', homeRoute);
-app.use('/maintenance', maintenanceRoutes);
+app.use('/login', loginRoute);
+app.use('/maintenance', authMiddleware, maintenanceRoutes);
 app.use('/user', userRoute);
-
-// Palvele staattisia tiedostoja
+app.use('/', authMiddleware, homeRoute);
 
 const start = async () => {
   try {

@@ -3,11 +3,17 @@ const dayjs = require('dayjs');
 
 const getAllMaintenances = async (req, res) => {
   try {
-    // Haetaan kaikki huollot tietokannasta
-    const maintenances = await Maintenance.find().sort({ maintenanceDate: -1 });
-    console.log(maintenances);
+    if (!req.user || !req.user.id) {
+      console.log('Ei ole req.useria');
+      throw new Error('Invalid user data');
+    }
 
+    // Haetaan kaikki huollot tietokannasta
+    const maintenances = await Maintenance.find({ user: req.user.id }).sort({
+      maintenanceDate: -1,
+    });
     res.render('index', { maintenances }); // Pass the maintenance data to the EJS file
+    // res.status(200).json({ maintenances }); // thunder client
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe haettaessa huoltoja tietokannasta:', error);
@@ -32,12 +38,14 @@ const createMaintenance = async (req, res) => {
       maintenanceDate: req.body.maintenanceDate,
       mileage: req.body.mileage,
       details: req.body.details,
+      user: req.user.id,
     });
     const maintenance = await newMaintenance.save();
 
     req.flash('success', 'Huolto lisätty onnistuneesti!');
 
-    res.status(200).redirect(`/`);
+    // res.status(200).redirect(`/`);
+    res.status(200).json({ maintenance }); // Thunder Clientille
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe lisättäessä huoltoa:', error);
