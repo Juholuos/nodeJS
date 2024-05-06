@@ -44,8 +44,8 @@ const createMaintenance = async (req, res) => {
 
     req.flash('success', 'Huolto lisätty onnistuneesti!');
 
-    // res.status(200).redirect(`/`);
-    res.status(200).json({ maintenance }); // Thunder Clientille
+    res.status(200).redirect(`/`);
+    // res.status(200).json({ maintenance }); // Thunder Clientille
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
     console.error('Virhe lisättäessä huoltoa:', error);

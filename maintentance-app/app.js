@@ -16,6 +16,7 @@ const loginRoute = require('./routes/login');
 const authMiddleware = require('./middleware/jwtAuth');
 const formatMaintenanceDate = require('./middleware/formatMaintenanceDate');
 const staticConfig = require('./middleware/config/static');
+const cookieParser = require('cookie-parser');
 
 app.set('view engine', 'ejs');
 
@@ -27,6 +28,7 @@ app.use(
     saveUninitialized: true,
   })
 );
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(formatMaintenanceDate);

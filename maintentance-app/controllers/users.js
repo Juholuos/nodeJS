@@ -18,7 +18,6 @@ const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    console.log('req.body:', req.body);
     if (!user) {
       return res.status(401).send('Väärä käyttäjätunnus tai salasana');
     }
@@ -32,7 +31,15 @@ const loginUser = async (req, res) => {
       expiresIn: '30d',
     });
 
-    res.status(200).json({ message: 'Login succesful', token }); // Thunderclient
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    res.status(200).redirect('/');
+    // res.status(200).json({ message: 'Login succesful', token }); // Thunderclient
   } catch (error) {
     console.error(error);
   }
