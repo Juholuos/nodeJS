@@ -13,6 +13,7 @@ const maintenanceRoutes = require('./routes/maintenances');
 const homeRoute = require('./routes/index');
 const userRoute = require('./routes/user');
 const loginRoute = require('./routes/login');
+const registerRoute = require('./routes/register');
 const authMiddleware = require('./middleware/jwtAuth');
 const formatMaintenanceDate = require('./middleware/formatMaintenanceDate');
 const staticConfig = require('./middleware/config/static');
@@ -43,6 +44,7 @@ app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use(staticConfig);
 
 // reititys
+app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/maintenance', authMiddleware, maintenanceRoutes);
 app.use('/user', userRoute);

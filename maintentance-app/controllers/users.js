@@ -8,7 +8,23 @@ const registerUser = async (req, res) => {
 
     const newUser = new User({ username, password });
     await newUser.save();
-    res.status(201).send('User registered succesfully');
+
+    const token = jwt.sign(
+      { id: newUser._id, username: newUser.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '30d',
+      }
+    );
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    res.status(200).redirect('/');
   } catch (error) {
     console.error(error);
   }
@@ -27,13 +43,17 @@ const loginUser = async (req, res) => {
       return res.status(401).send('Väärä käyttäjätunnus tai salasana');
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '30d',
-    });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '30d',
+      }
+    );
 
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     });

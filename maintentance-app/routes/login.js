@@ -4,6 +4,7 @@ const { loginUser } = require('../controllers/users');
 
 // Näytä kirjautumissivu
 router.get('/', (req, res) => {
+  res.clearCookie('token');
   res.render('login'); // renderöi login.ejs
 });
 

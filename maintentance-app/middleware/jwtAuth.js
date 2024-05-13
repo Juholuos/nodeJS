@@ -4,7 +4,8 @@ const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).send('Unauthorized: No token provided');
+    // No token provided
+    return res.status(401).redirect('/login');
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

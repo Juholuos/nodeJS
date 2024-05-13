@@ -1,4 +1,5 @@
 const Maintenance = require('../models/Maintenance');
+const User = require('../models/User');
 const dayjs = require('dayjs');
 
 const getAllMaintenances = async (req, res) => {
@@ -7,12 +8,13 @@ const getAllMaintenances = async (req, res) => {
       console.log('Ei ole req.useria');
       throw new Error('Invalid user data');
     }
-
+    console.log('user: ', req.user);
     // Haetaan kaikki huollot tietokannasta
     const maintenances = await Maintenance.find({ user: req.user.id }).sort({
       maintenanceDate: -1,
     });
-    res.render('index', { maintenances }); // Pass the maintenance data to the EJS file
+
+    res.render('index', { maintenances, username: req.user.username }); // Pass the maintenance data to the EJS file
     // res.status(200).json({ maintenances }); // thunder client
   } catch (error) {
     // Käsitellään virheet, jos sellaisia tulee
@@ -114,8 +116,11 @@ const renderMaintenancePage = async (req, res) => {
     const formattedDate = dayjs(maintenance.maintenanceDate).format(
       'YYYY-MM-DD'
     );
-
-    res.render('updateMaintenance', { maintenance, formattedDate });
+    console.log(req.user);
+    res.render('updateMaintenance', {
+      maintenance,
+      formattedDate,
+    });
   } catch (error) {
     console.error(error);
   }
